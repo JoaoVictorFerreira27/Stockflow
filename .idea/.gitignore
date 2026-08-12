@@ -1,5 +1,6 @@
-# Default ignored files
-/shelf/
-/workspace.xml
-# Editor-based HTTP Client requests
-/httpRequests/
+venv/
+__pycache__/
+*.pyc
+data/stockflow.db
+data/relatorio_estoque.txt
+.DS_Store

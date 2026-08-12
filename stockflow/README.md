@@ -105,4 +105,4 @@ stockflow/
 ---
 
 Projeto desenvolvido por **João Victor Ferreira** como parte do portfólio pessoal.
-[LinkedIn](https://linkedin.com/in/joao-victor-ferreira) · [GitHub](https://github.com/joaovictorferreira)
+[LinkedIn](https://www.linkedin.com/in/jo%C3%A3o-victor-ferreira-b154a326a/) · [GitHub](https://github.com/JoaoVictorFerreira27)

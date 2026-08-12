@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · StockFlow{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Dashboard</h1>
+    <p class="subtitle">Visão geral do estoque em tempo real</p>
+</header>
+
+<section class="metric-grid">
+    <div class="metric-card">
+        <span class="metric-label">Produtos cadastrados</span>
+        <span class="metric-value">{{ metrics.total_products }}</span>
+    </div>
+    <div class="metric-card">
+        <span class="metric-label">Valor total em estoque</span>
+        <span class="metric-value">R$ {{ "%.2f"|format(metrics.total_value) }}</span>
+    </div>
+    <div class="metric-card {{ 'metric-alert' if metrics.low_stock|length > 0 }}">
+        <span class="metric-label">Itens em estoque baixo</span>
+        <span class="metric-value">{{ metrics.low_stock|length }}</span>
+    </div>
+    <div class="metric-card">
+        <span class="metric-label">Categorias</span>
+        <span class="metric-value">{{ metrics.by_category|length }}</span>
+    </div>
+</section>
+
+<section class="panel-grid">
+    <div class="panel">
+        <h2>Alertas de estoque baixo</h2>
+        {% if metrics.low_stock %}
+        <table class="data-table">
+            <thead>
+                <tr><th>Produto</th><th>Categoria</th><th>Qtd.</th><th>Mín.</th></tr>
+            </thead>
+            <tbody>
+                {% for item in metrics.low_stock %}
+                <tr>
+                    <td>{{ item.name }}</td>
+                    <td>{{ item.category }}</td>
+                    <td class="text-danger">{{ item.quantity }}</td>
+                    <td>{{ item.min_stock }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">Nenhum item abaixo do estoque mínimo. Tudo em ordem.</p>
+        {% endif %}
+    </div>
+
+    <div class="panel">
+        <h2>Produtos por categoria</h2>
+        {% if metrics.by_category %}
+        <table class="data-table">
+            <thead>
+                <tr><th>Categoria</th><th>Itens</th><th>Unidades</th></tr>
+            </thead>
+            <tbody>
+                {% for cat in metrics.by_category %}
+                <tr>
+                    <td>{{ cat.category }}</td>
+                    <td>{{ cat.total }}</td>
+                    <td>{{ cat.units }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">Nenhum produto cadastrado ainda.</p>
+        {% endif %}
+    </div>
+
+    <div class="panel">
+        <h2>Últimas importações</h2>
+        {% if history %}
+        <table class="data-table">
+            <thead>
+                <tr><th>Arquivo</th><th>Importados</th><th>Rejeitados</th><th>Data</th></tr>
+            </thead>
+            <tbody>
+                {% for h in history %}
+                <tr>
+                    <td>{{ h.filename }}</td>
+                    <td class="text-success">{{ h.rows_imported }}</td>
+                    <td class="{{ 'text-danger' if h.rows_rejected > 0 }}">{{ h.rows_rejected }}</td>
+                    <td>{{ h.created_at }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p class="empty-state">Nenhuma importação realizada ainda. <a href="{{ url_for('import_products') }}">Importar CSV</a></p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

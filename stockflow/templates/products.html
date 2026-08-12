@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block title %}Produtos · StockFlow{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Produtos</h1>
+    <a href="{{ url_for('new_product') }}" class="btn btn-primary">+ Novo produto</a>
+</header>
+
+<form class="filter-bar" method="get">
+    <input type="text" name="search" placeholder="Buscar por nome..." value="{{ search }}">
+    <select name="category">
+        <option value="">Todas as categorias</option>
+        {% for cat in categories %}
+        <option value="{{ cat }}" {{ 'selected' if cat == selected_category }}>{{ cat }}</option>
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-secondary">Filtrar</button>
+</form>
+
+{% if products %}
+<table class="data-table full-width">
+    <thead>
+        <tr>
+            <th>Nome</th>
+            <th>Categoria</th>
+            <th>Quantidade</th>
+            <th>Estoque mín.</th>
+            <th>Preço unit.</th>
+            <th>Valor total</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in products %}
+        <tr class="{{ 'row-alert' if p.quantity <= p.min_stock }}">
+            <td>{{ p.name }}</td>
+            <td>{{ p.category }}</td>
+            <td>{{ p.quantity }}</td>
+            <td>{{ p.min_stock }}</td>
+            <td>R$ {{ "%.2f"|format(p.unit_price) }}</td>
+            <td>R$ {{ "%.2f"|format(p.quantity * p.unit_price) }}</td>
+            <td class="actions">
+                <a href="{{ url_for('edit_product', product_id=p.id) }}">Editar</a>
+                <form method="post" action="{{ url_for('delete_product', product_id=p.id) }}"
+                      onsubmit="return confirm('Excluir este produto?');">
+                    <button type="submit" class="link-danger">Excluir</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p class="empty-state">Nenhum produto encontrado. <a href="{{ url_for('new_product') }}">Cadastrar o primeiro produto</a> ou <a href="{{ url_for('import_products') }}">importar via CSV</a>.</p>
+{% endif %}
+{% endblock %}

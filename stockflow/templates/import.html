@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+{% block title %}Importar CSV · StockFlow{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>Importar produtos via CSV</h1>
+    <p class="subtitle">Suba uma planilha com várias linhas de uma vez. O sistema valida, limpa e importa automaticamente.</p>
+</header>
+
+<div class="panel">
+    <h2>Formato esperado</h2>
+    <p>O arquivo CSV deve conter as colunas: <code>name, category, quantity, min_stock, unit_price</code></p>
+    <p class="hint">Linhas com nome vazio, quantidades negativas, valores não numéricos ou nomes duplicados são
+        automaticamente rejeitadas e reportadas — o restante é importado normalmente.</p>
+    <a href="{{ url_for('static', filename='sample_products.csv') }}" download>Baixar exemplo de CSV</a>
+</div>
+
+<form method="post" enctype="multipart/form-data" class="form-card">
+    <label>
+        Arquivo CSV
+        <input type="file" name="csv_file" accept=".csv" required>
+    </label>
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Importar</button>
+    </div>
+</form>
+
+{% if report %}
+<div class="panel">
+    <h2>Relatório da importação</h2>
+    <section class="metric-grid">
+        <div class="metric-card">
+            <span class="metric-label">Linhas no arquivo</span>
+            <span class="metric-value">{{ report.rows_total }}</span>
+        </div>
+        <div class="metric-card">
+            <span class="metric-label">Importadas com sucesso</span>
+            <span class="metric-value text-success">{{ report.rows_imported }}</span>
+        </div>
+        <div class="metric-card {{ 'metric-alert' if report.rows_rejected > 0 }}">
+            <span class="metric-label">Rejeitadas</span>
+            <span class="metric-value">{{ report.rows_rejected }}</span>
+        </div>
+    </section>
+
+    {% if report.errors %}
+    <h3>Detalhe das linhas rejeitadas</h3>
+    <table class="data-table">
+        <thead><tr><th>Linha</th><th>Motivo</th></tr></thead>
+        <tbody>
+            {% for err in report.errors %}
+            <tr><td>{{ err.row }}</td><td>{{ err.reason }}</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+</div>
+{% endif %}
+{% endblock %}

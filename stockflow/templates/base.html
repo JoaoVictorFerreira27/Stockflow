@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}StockFlow{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <span class="brand-mark">SF</span>
+                <span class="brand-name">StockFlow</span>
+            </div>
+            <nav>
+                <a href="{{ url_for('dashboard') }}" class="{{ 'active' if request.endpoint == 'dashboard' }}">Dashboard</a>
+                <a href="{{ url_for('products') }}" class="{{ 'active' if request.endpoint in ['products','new_product','edit_product'] }}">Produtos</a>
+                <a href="{{ url_for('import_products') }}" class="{{ 'active' if request.endpoint == 'import_products' }}">Importar CSV</a>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="{{ url_for('export_products') }}">Exportar produtos (.csv)</a>
+                <a href="{{ url_for('export_low_stock') }}">Exportar estoque baixo (.csv)</a>
+            </div>
+        </aside>
+
+        <main class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-stack">
+                        {% for category, message in messages %}
+                            <div class="flash flash-{{ category }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+</body>
+</html>

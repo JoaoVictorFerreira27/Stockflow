@@ -1,0 +1,10 @@
+name,category,quantity,min_stock,unit_price
+Arroz 5kg,Alimentos,40,10,24.90
+Feijão 1kg,Alimentos,8,10,7.50
+Detergente,Limpeza,25,5,3.20
+Sabão em Pó,Limpeza,3,5,15.90
+Caderno Universitário,Papelaria,60,15,12.00
+,Papelaria,10,5,5.00
+Caneta Azul,Papelaria,-5,10,1.50
+Arroz 5kg,Alimentos,20,10,24.90
+Óleo de Soja,Alimentos,abc,10,8.90

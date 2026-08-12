@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Editar' if product else 'Novo' }} produto · StockFlow{% endblock %}
+
+{% block content %}
+<header class="page-header">
+    <h1>{{ 'Editar produto' if product else 'Novo produto' }}</h1>
+</header>
+
+<form method="post" class="form-card">
+    <label>
+        Nome do produto
+        <input type="text" name="name" value="{{ product.name if product else '' }}" required>
+    </label>
+
+    <label>
+        Categoria
+        <input type="text" name="category" value="{{ product.category if product else 'Geral' }}">
+    </label>
+
+    <div class="form-row">
+        <label>
+            Quantidade em estoque
+            <input type="number" name="quantity" min="0" value="{{ product.quantity if product else 0 }}" required>
+        </label>
+        <label>
+            Estoque mínimo
+            <input type="number" name="min_stock" min="0" value="{{ product.min_stock if product else 5 }}" required>
+        </label>
+        <label>
+            Preço unitário (R$)
+            <input type="number" step="0.01" min="0" name="unit_price" value="{{ product.unit_price if product else 0 }}" required>
+        </label>
+    </div>
+
+    <div class="form-actions">
+        <a href="{{ url_for('products') }}" class="btn btn-secondary">Cancelar</a>
+        <button type="submit" class="btn btn-primary">Salvar</button>
+    </div>
+</form>
+{% endblock %}

@@ -1,0 +1,26 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+
+# SQLite database
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+
+# Generated reports
+*.txt
+!requirements.txt
+
+# OS
+.DS_Store
+Thumbs.db
